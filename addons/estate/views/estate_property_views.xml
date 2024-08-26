@@ -1,0 +1,121 @@
+<?xml version="1.0"?>
+<odoo>
+    <!-- model.name search view -->
+    <record id="estate_property_search" model="ir.ui.view">
+        <field name="name">estate.property.search</field>
+        <field name="model">estate.property</field>
+        <field name="arch" type="xml">
+            <search string="Estates">
+                <field name="name" string="Proprietà" />
+                <!-- <field name="description" string="Name and description"
+                    domain="['|', ('name', 'ilike', self), ('description', 'ilike', self)]" /> -->
+
+                <field name="living_area" filter_domain="[('living_area', '>', self)]" />
+                <filter string="Available" name="available_properties"
+                    domain="[('state', 'in', ('offer_received', 'new'))]" />
+                <separator />
+                <filter string="Archived" name="inactive" domain="[('active', '=', False)]" />
+                <field name="garden_orientation" />
+                <group expand="1" string="Group By">
+                    <filter string="Garden Orientation" name="garden_orientation_type" domain=""
+                        context="{'group_by':'garden_orientation'}" />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="estate_property_action" model="ir.actions.act_window">
+        <field name="name">Properties</field>
+        <field name="search_view_id" ref="estate_property_search" />
+        <field name="context">{'search_default_available_properties': 1}</field>
+        <field name="res_model">estate.property</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="estate_property_tree" model="ir.ui.view">
+        <field name="name">estate.property.tree</field>
+        <field name="model">estate.property</field>
+        <field name="arch" type="xml">
+            <tree string="Channel">
+                <field name="name" />
+                <field name="postcode" />
+                <field name="tag_ids" widget="many2many_tags" />
+                <field name="bedrooms" />
+                <field name="living_area" />
+                <field name="expected_price" />
+                <field name="selling_price" />
+                <field name="date_availability" />
+                <!-- <field name="state" invisible="1" /> -->
+            </tree>
+        </field>
+    </record>
+
+    <record id="estate_property_form" model="ir.ui.view">
+        <field name="name">estate.property.form</field>
+        <field name="model">estate.property</field>
+        <field name="arch" type="xml">
+            <form string="Estate Property">
+                <sheet>
+                    <!-- 
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_lost_leads" type="object"
+                            class="oe_stat_button" icon="fa-star">
+                        </button>
+                    </div>
+                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger"
+                        attrs="{'invisible': [('active', '=', True)]}" />
+                    -->
+                    <div class="oe_title">
+                        <div class="oe_edit_only">
+                            <label for="name" string="Property" />
+                        </div>
+                        <h1>
+                            <field name="name" class="o_text_overflow" />
+                        </h1>
+                        <div class="oe_edit_only">
+                            <label for="tag_ids" string="Tags" />
+                        </div>
+                        <field name="tag_ids" widget="many2many_tags" class="mb32" />
+                        <field name="active" invisible="1" />
+                    </div>
+                    <group>
+                        <group>
+                            <field name="type_id" />
+                            <field name="postcode" />
+                            <field name="date_availability" />
+                        </group>
+                        <group>
+                            <field name="expected_price" />
+                            <field name="selling_price" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description">
+                            <group>
+                                <field name="description" />
+                                <field name="bedrooms" />
+                                <field name="living_area" />
+                                <field name="facades" />
+                                <field name="garage" />
+                                <field name="garden" />
+                                <field name="garden_area" />
+                                <field name="garden_orientation" />
+                            </group>
+                        </page>
+                        <page string="Offers">
+                            <group>
+                                <field name="offer_ids" />
+                            </group>
+                        </page>
+                        <page string="Other info">
+                            <group>
+                                <field name="salesperson_id" />
+                                <field name="buyer_id" />
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>
