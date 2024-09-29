@@ -6,9 +6,10 @@ class PropertyTag(models.Model):
     _order="name asc"
 
     name = fields.Char("Tag", required=True)
+    color = fields.Integer(string="Color")
 
     property_ids = fields.Many2many("estate.property", string="Properties")
 
     _sql_constraints = [
-        ('unique_type', 'unique(name)', "Property type already exists.")
+        ('unique_type', 'unique(name)', "Tag already exists.")
     ]

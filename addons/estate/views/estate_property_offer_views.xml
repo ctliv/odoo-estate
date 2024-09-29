@@ -13,10 +13,14 @@
         <field name="name">estate.property.offer.view.tree</field>
         <field name="model">estate.property.offer</field>
         <field name="arch" type="xml">
-            <tree>
+            <tree editable="top" decoration-success="status =='accepted'" decoration-danger="status =='refused'" >
                 <field name="price"/>
-                <field name="status"/>
                 <field name="partner_id"/>
+                <field name="validity"/>
+                <field name="deadline"/>
+                <button name="action_accept" type="object" icon="fa-check" string=" " help="Accept" confirm="Confirm accepted?" invisible="not status" />
+                <button name="action_refuse" type="object" icon="fa-times" string=" " help="Refuse" confirm="Confirm refused?" invisible="not status" />
+                <field name="status"/>
             </tree>
         </field>
     </record>
@@ -32,6 +36,9 @@
                         <field name="price"/>
                         <field name="partner_id"/>
                         <field name="status" />
+                        <field name="create_date" string="Data creazione" readonly="1" />
+                        <field name="validity" readonly="0"/>
+                        <field name="deadline" readonly="0"/>
                     </group>
                 </sheet>
             </form>

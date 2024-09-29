@@ -8,22 +8,22 @@
             <search string="Estates">
                 <field name="name" string="Proprietà" />
                 <!-- <field name="description" string="Name and description"
-                    domain="['|', ('name', 'ilike', self), ('description', 'ilike', self)]" /> -->
-
+                domain="['|', ('name', 'ilike', self), ('description', 'ilike', self)]" /> -->
+                
                 <field name="living_area" filter_domain="[('living_area', '>', self)]" />
                 <filter string="Available" name="available_properties"
-                    domain="[('state', 'in', ('offer_received', 'new'))]" />
+                domain="[('state', 'in', ('offer_received', 'new'))]" />
                 <separator />
                 <filter string="Archived" name="inactive" domain="[('active', '=', False)]" />
                 <field name="garden_orientation" />
                 <group expand="1" string="Group By">
                     <filter string="Garden Orientation" name="garden_orientation_type" domain=""
-                        context="{'group_by':'garden_orientation'}" />
+                    context="{'group_by':'garden_orientation'}" />
                 </group>
             </search>
         </field>
     </record>
-
+    
     <record id="estate_property_action" model="ir.actions.act_window">
         <field name="name">Properties</field>
         <field name="search_view_id" ref="estate_property_search" />
@@ -31,7 +31,7 @@
         <field name="res_model">estate.property</field>
         <field name="view_mode">tree,form</field>
     </record>
-
+    
     <record id="estate_property_tree" model="ir.ui.view">
         <field name="name">estate.property.tree</field>
         <field name="model">estate.property</field>
@@ -46,26 +46,31 @@
                 <field name="expected_price" />
                 <field name="best_offer" />
                 <field name="selling_price" />
-                <field name="date_availability" />
+                <field name="date_availability" optional="hide" />
                 <!-- <field name="state" invisible="1" /> -->
             </tree>
         </field>
     </record>
-
+    
     <record id="estate_property_form" model="ir.ui.view">
         <field name="name">estate.property.form</field>
         <field name="model">estate.property</field>
         <field name="arch" type="xml">
             <form string="Estate Property">
+                <header>
+                    <button name="action_cancel" type="object" string="Cancel" invisible="state in ('sold', 'canceled')" />
+                    <button name="action_sell" type="object" string="Sell" class="oe_highlight" invisible="state in ('sold', 'canceled')" />
+                    <field name="state" widget="statusbar" statusbar_visible="new,offer_received,offer_accepted,sold"/>
+                </header>            
                 <sheet>
                     <!-- 
                     <div class="oe_button_box" name="button_box">
-                        <button name="action_lost_leads" type="object"
-                            class="oe_stat_button" icon="fa-star">
-                        </button>
+                    <button name="action_lost_leads" type="object"
+                    class="oe_stat_button" icon="fa-star">
+                    </button>
                     </div>
                     <widget name="web_ribbon" title="Archived" bg_color="bg-danger"
-                        attrs="{'invisible': [('active', '=', True)]}" />
+                    attrs="{'invisible': [('active', '=', True)]}" />
                     -->
                     <div class="oe_title">
                         <div class="oe_edit_only">
@@ -77,17 +82,19 @@
                         <div class="oe_edit_only">
                             <label for="tag_ids" string="Tags" />
                         </div>
-                        <field name="tag_ids" widget="many2many_tags" class="mb32" />
+                        <field name="tag_ids" widget="many2many_tags" class="mb32" options="{'color_field': 'color'}" />
                         <field name="active" invisible="1" />
                     </div>
                     <group>
                         <group>
-                            <field name="type_id" />
+                            <field name="state" />
+                            <field name="type_id" can_create="false" can_write="false" />
                             <field name="postcode" />
                             <field name="date_availability" />
                         </group>
                         <group>
                             <field name="expected_price" />
+                            <field name="best_offer" />
                             <field name="selling_price" />
                         </group>
                     </group>
@@ -100,13 +107,13 @@
                                 <field name="facades" />
                                 <field name="garage" />
                                 <field name="garden" />
-                                <field name="garden_area" />
-                                <field name="garden_orientation" />
+                                <field name="garden_area" invisible="not garden" />
+                                <field name="garden_orientation" invisible="not garden" />
                             </group>
                         </page>
                         <page string="Offers">
                             <group>
-                                <field name="offer_ids" />
+                                <field name="offer_ids" readonly="state not in('new','offer_received')" />
                             </group>
                         </page>
                         <page string="Other info">
