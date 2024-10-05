@@ -13,9 +13,9 @@
         <field name="model">estate.property.type</field>
         <field name="arch" type="xml">
             <tree>
-                <field name="sequence" widget="handle"/>
-                <field name="name"/>
-                <field name="active"/>
+                <field name="sequence" widget="handle" />
+                <field name="name" />
+                <field name="active" />
             </tree>
         </field>
     </record>
@@ -26,13 +26,19 @@
         <field name="model">estate.property.type</field>
         <field name="arch" type="xml">
             <form string="">
-                <field name="name"/>
-                <field name="active"/>
-                <field name="property_ids"> 
+                <header>
+                    <button class="oe_stat_button" icon="fa-dollar" type="action" name="%(estate_property_offer)d" >
+                        <field string="" name="offer_count" widget="statinfo"/>
+                    </button>
+                </header>
+                <field name="name" />
+                <field name="active" />
+                <field name="offer_count" string="Offers" readonly="1" />
+                <field name="property_ids">
                     <tree>
-                        <field name="name"/>
-                        <field name="expected_price"/>
-                        <field name="state"/>
+                        <field name="name" />
+                        <field name="expected_price" />
+                        <field name="state" />
                     </tree>
                 </field>
             </form>

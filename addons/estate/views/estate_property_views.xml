@@ -1,42 +1,40 @@
 <?xml version="1.0"?>
 <odoo>
+
+    <record id="estate_property_action" model="ir.actions.act_window">
+        <field name="name">Properties</field>
+        <field name="search_view_id" ref="estate_property_search" />
+        <field name="context">{'search_default_available': 1}</field>
+        <field name="res_model">estate.property</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
     <!-- model.name search view -->
     <record id="estate_property_search" model="ir.ui.view">
         <field name="name">estate.property.search</field>
         <field name="model">estate.property</field>
         <field name="arch" type="xml">
-            <search string="Estates">
-                <field name="name" string="Proprietà" />
-                <!-- <field name="description" string="Name and description"
-                domain="['|', ('name', 'ilike', self), ('description', 'ilike', self)]" /> -->
-                
-                <field name="living_area" filter_domain="[('living_area', '>', self)]" />
-                <filter string="Available" name="available_properties"
-                domain="[('state', 'in', ('offer_received', 'new'))]" />
+            <search>
+                <field name="name" />
+                <field name="description" string="Name and description" filter_domain="[ '|', ('name', 'ilike', self), ('description', 'ilike', self) ]" />
+
+                <field name="living_area" string="Living Area over" filter_domain="[('living_area', '>', self)]" />
+                <filter string="Available" name="available" domain="[('state', 'in', ('offer_received', 'new'))]" />
                 <separator />
                 <filter string="Archived" name="inactive" domain="[('active', '=', False)]" />
                 <field name="garden_orientation" />
                 <group expand="1" string="Group By">
-                    <filter string="Garden Orientation" name="garden_orientation_type" domain=""
-                    context="{'group_by':'garden_orientation'}" />
+                    <filter string="Garden Orientation" name="garden_orientation_type" domain="" context="{'group_by':'garden_orientation'}" />
                 </group>
             </search>
         </field>
     </record>
-    
-    <record id="estate_property_action" model="ir.actions.act_window">
-        <field name="name">Properties</field>
-        <field name="search_view_id" ref="estate_property_search" />
-        <field name="context">{'search_default_available_properties': 1}</field>
-        <field name="res_model">estate.property</field>
-        <field name="view_mode">tree,form</field>
-    </record>
-    
+
     <record id="estate_property_tree" model="ir.ui.view">
         <field name="name">estate.property.tree</field>
         <field name="model">estate.property</field>
         <field name="arch" type="xml">
-            <tree string="Channel">
+            <tree string="Channel" decoration-success="state in ('offer_received','offer_accepted')" decoration-bf="state == 'offer_accepted'" decoration-muted="state == 'sold'">
                 <field name="name" />
                 <field name="postcode" />
                 <field name="tag_ids" widget="many2many_tags" />
@@ -47,11 +45,12 @@
                 <field name="best_offer" />
                 <field name="selling_price" />
                 <field name="date_availability" optional="hide" />
-                <!-- <field name="state" invisible="1" /> -->
+                <field name="state" invisible="1" />
+                <!-- <field name="description" invisible="1" /> -->
             </tree>
         </field>
     </record>
-    
+
     <record id="estate_property_form" model="ir.ui.view">
         <field name="name">estate.property.form</field>
         <field name="model">estate.property</field>
@@ -60,17 +59,15 @@
                 <header>
                     <button name="action_cancel" type="object" string="Cancel" invisible="state in ('sold', 'canceled')" />
                     <button name="action_sell" type="object" string="Sell" class="oe_highlight" invisible="state in ('sold', 'canceled')" />
-                    <field name="state" widget="statusbar" statusbar_visible="new,offer_received,offer_accepted,sold"/>
-                </header>            
+                    <field name="state" widget="statusbar" statusbar_visible="new,offer_received,offer_accepted,sold" />
+                </header>
                 <sheet>
                     <!-- 
                     <div class="oe_button_box" name="button_box">
-                    <button name="action_lost_leads" type="object"
-                    class="oe_stat_button" icon="fa-star">
+                    <button name="action_lost_leads" type="object" class="oe_stat_button" icon="fa-star">
                     </button>
                     </div>
-                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger"
-                    attrs="{'invisible': [('active', '=', True)]}" />
+                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}" />
                     -->
                     <div class="oe_title">
                         <div class="oe_edit_only">
