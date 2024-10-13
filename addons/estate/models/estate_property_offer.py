@@ -92,3 +92,12 @@ class PropertyOffer(models.Model):
                 raise ValidationError(
                     "The price cannot be less than 90% of expected_price"
                 )
+
+    @api.model_create_multi
+    def create(self, vals):
+        created = super(PropertyOffer, self).create(vals)
+        for record in created:
+            if record.property_id.state == 'new':
+                record.property_id.state = 'offer_received'
+        return created
+    

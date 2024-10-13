@@ -106,4 +106,10 @@ class Property(models.Model):
                     if tools.float_compare(offer.price, record.expected_price * 0.9, precision_digits=1) < 0:
                         raise ValidationError("An offer price is less that 90% of expected price")
                     
-                    
+    @api.ondelete(at_uninstall=False)
+    def on_delete(self):
+        for record in self:
+            if self.state not in ('new', 'canceled'):
+                raise UserError("Only new or canceled properties can be deleted")
+    
+    
