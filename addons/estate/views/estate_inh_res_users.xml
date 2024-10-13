@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <!-- res_users inherit form view -->
+    <record id="estate_inh_res_users" model="ir.ui.view">
+        <field name="name">estate.inh.res.users</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form"/>
+        <field name="arch" type="xml">
+            <!-- Add your xpath here -->
+            <xpath expr="//page[@name='account_security']" position="after">
+                <!-- Add your fields here -->
+                <page string="Properties" name="user_properties">
+                    <field name="property_ids" string=""/>
+                </page>
+            </xpath>
+        </field>
+    </record>    
+</odoo>

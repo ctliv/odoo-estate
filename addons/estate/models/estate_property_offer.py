@@ -95,6 +95,8 @@ class PropertyOffer(models.Model):
 
     @api.model_create_multi
     def create(self, vals):
+        # the property_id field is available in the vals, but it is an int.
+        # To instantiate an estate.property object, use self.env[model_name].browse(value)
         created = super(PropertyOffer, self).create(vals)
         for record in created:
             if record.property_id.state == 'new':
