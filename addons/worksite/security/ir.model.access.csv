@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+worksite.access_worksite_site,access_worksite_site,worksite.model_worksite_site,base.group_user,1,1,1,1
+worksite.access_worksite_ddt,access_worksite_ddt,worksite.model_worksite_ddt,base.group_user,1,1,1,1
