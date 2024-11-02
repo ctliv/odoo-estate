@@ -1,4 +1,91 @@
 <?xml version='1.0' encoding='utf-8'?>
 <odoo>
+
+    <!-- worksite.site search view -->
+    <record id="worksite_site_view_search" model="ir.ui.view">
+        <field name="name">worksite.site.view.search</field>
+        <field name="model">worksite.site</field>
+        <field name="arch" type="xml">
+            <search string="Search Description">
+                <!-- Add your fields here -->
+                <field name="name"/>
+                <field name="street" 
+                    string="Nome e indirizzo" 
+                    filter_domain="[ '|', ('name', 'ilike', self), 
+                                        ('street', 'ilike', self), 
+                                        ('street2', 'ilike', self), 
+                                        ('city_id.city', 'ilike', self) ]" />
+                <separator />
+                <filter name="active" string="Attivi" domain="[('status', '=', 'active')]" />
+                <group expand="1" string="Group By">
+                    <filter string="Stato" name="status" domain="" context="{'group_by':'status'}" />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- worksite.site action window -->
+    <record id="worksite_site_action" model="ir.actions.act_window">
+        <field name="name">worksite.site.action</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">worksite.site</field>
+        <field name="view_mode">list,form</field>
+        <!-- <field name="view_type">form</field> -->
+        <!-- <field name="domain">[]</field> -->
+        <field name="context">{'search_default_available': 1}</field>
+        <!-- <field name="target">{current}</field> -->
+    </record>
     
+    <!-- worksite.site tree view -->
+    <record id="worksite_site_view_list" model="ir.ui.view">
+        <field name="name">worksite.site.view.list</field>
+        <field name="model">worksite.site</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="status"/>
+                <field name="street"/>
+                <field name="city_id"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- worksite.site form view -->
+    <record id="worksite_site_view_form" model="ir.ui.view">
+        <field name="name">worksite.site.view.form</field>
+        <field name="model">worksite.site</field>
+        <field name="arch" type="xml">
+            <form string="">
+                <sheet>
+                    <widget name="web_ribbon" title="Sospeso" bg_color="text-bg-warning" invisible="status == 'suspended'"/>
+                    <widget name="web_ribbon" title="Chiuso" bg_color="text-bg-danger" invisible="status == 'closed'"/>
+                    <widget name="web_ribbon" title="Completato" bg_color="text-bg-primary" invisible="status == 'completed'"/>
+                    <field name="image" widget="image" class="oe_avatar" options="{'preview_image': 'avatar_128'}"/>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" placeholder="(Nome cantiere)"/>
+                        </h1>
+                    </div>                    
+                    <group>
+                        <label for="street" string="Indirizzo"/>
+                        <div class="o_address_format">
+                            <field name="street" placeholder="Indirizzo..." class="o_address_street"/>
+                            <field name="street2" placeholder="Indirizzo 2..." class="o_address_street"/>
+                            <field name="zip" placeholder="CAP" class="o_address_zip"/>
+                            <field name="city_id" placeholder="Comune e provincia" class="o_address_city"/>
+                            <!-- <field name="city" placeholder="Città" class="o_address_city"/>
+                            <field name="state_id" class="o_address_state" placeholder="Provincia" options="{'no_open': True}" on_change="1" can_create="True" can_write="True"/>
+                            <field name="country_id" placeholder="Nazione" class="o_address_country" invisible="1" readonly="1"/> -->
+                            <field name="attachment_ids" widget="many2many_binary" />                        
+                        </div>
+                    </group>
+                    <group>
+                        <field name="status" decoration-primary="status == 'active'" decoration-warning="status == 'suspended'" decoration-danger="status == 'closed'"/>
+                        <field name="note" placeholder="(Inserisci note)"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
 </odoo>

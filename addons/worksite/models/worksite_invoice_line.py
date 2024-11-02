@@ -1,4 +1,5 @@
 from odoo import fields, models, api
+from odoo.exceptions import ValidationError
 
 INVOICELINE_TOCHECK = 'tocheck'
 INVOICELINE_CHECKED = 'checked'
@@ -11,7 +12,7 @@ INVOICELINE_STATUS = [
 class WorksiteInvoiceLineInh(models.Model):
     _inherit = "account.move.line"
 
-    costPc = fields.Integer("Percentuale costo", min=0, max=100)
+    costPc = fields.Integer("Percentuale costo")
     spanAll = fields.Boolean("Dividere su tutti i cantieri attivi", default=False)
 
     #TODO: Il campo è calcolato in base a ddt_id. Oppure sostituirlo con una classe css apposita in base a ddt_id
@@ -26,5 +27,10 @@ class WorksiteInvoiceLineInh(models.Model):
     worksite_id = fields.Many2one('worksite.site')
     ddt_id = fields.Many2one('worksite.ddt')
 
-    #TODO: ddt_id = fields.Many2One('worksite_ddt')
+    @api.constrains('costPc')
+    def _check_selling_price(self):
+        for record in self:
+            if record.costPc and (record.costPc < 0 or record.costPc > 100):
+                raise ValidationError("Percentuale non valida")
+            
 

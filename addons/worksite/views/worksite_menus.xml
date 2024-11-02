@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+
+    <!-- This Menu Item must have a parent and an action -->
+    <menuitem id="worksite_menu_cantieri" 
+        name="Cantieri" 
+        parent="account.menu_finance" 
+        action="worksite_site_action" 
+        sequence="10"/>
+
+</odoo>

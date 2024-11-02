@@ -33,9 +33,12 @@ class WorksiteSite(models.Model):
     street = fields.Char('Indirizzo')
     street2 = fields.Char('Indirizzo 2')
     zip = fields.Char('CAP', size=5, default='29121')
-    city = fields.Char('Comune', default='Piacenza')
-    state_id = fields.Many2one('res.country.state', 'Provincia', domain="[('country_id', '=?', country)]", default=379)    
-    country_id = fields.Many2one('res.country', string='Nazione', default=109)
+
+    city_id = fields.Many2one('worksite.city', string="Comune e Provincia")
+
+    # city = fields.Char('Comune', default='Piacenza')
+    # state_id = fields.Many2one('res.country.state', 'Provincia', domain="[('country_id', '=?', country)]", default=379)    
+    # country_id = fields.Many2one('res.country', string='Nazione', default=109)
 
     note = fields.Html('Note')
 
