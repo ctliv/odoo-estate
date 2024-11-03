@@ -15,13 +15,14 @@ class WorksiteInvoiceLineInh(models.Model):
     costPc = fields.Integer("Percentuale costo")
     spanAll = fields.Boolean("Dividere su tutti i cantieri attivi", default=False)
 
-    #TODO: Il campo è calcolato in base a ddt_id. Oppure sostituirlo con una classe css apposita in base a ddt_id
+    #Il campo è definito dalla presenza del  ddt_id. Oppure sostituirlo con una classe css apposita in base a ddt_id
     status = fields.Selection(
             string='Stato',
             selection=INVOICELINE_STATUS,
-            default=INVOICELINE_TOCHECK,
-            required=True,
-            copy=False
+            compute="_compute_status"
+            # default=INVOICELINE_TOCHECK,
+            # required=True,
+            # copy=False
             )
     
     worksite_id = fields.Many2one('worksite.site')
@@ -33,4 +34,11 @@ class WorksiteInvoiceLineInh(models.Model):
             if record.costPc and (record.costPc < 0 or record.costPc > 100):
                 raise ValidationError("Percentuale non valida")
             
+    @api.depends('ddt_id')
+    def _compute_line_count(self):
+        for rec in self:
+            if rec.ddt_id:
+                rec.status = INVOICELINE_CHECKED
+            else:
+                rec.status = INVOICELINE_TOCHECK
 

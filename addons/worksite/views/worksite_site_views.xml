@@ -26,9 +26,10 @@
 
     <!-- worksite.site action window -->
     <record id="worksite_site_action" model="ir.actions.act_window">
-        <field name="name">worksite.site.action</field>
+        <field name="name">Cantieri</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">worksite.site</field>
+        <field name="path">cantieri</field>
         <field name="view_mode">list,form</field>
         <!-- <field name="view_type">form</field> -->
         <!-- <field name="domain">[]</field> -->
@@ -45,6 +46,8 @@
                 <field name="name"/>
                 <field name="status"/>
                 <field name="street"/>
+                <field name="street2" optional="hide"/>
+                <field name="zip"/>
                 <field name="city_id"/>
             </list>
         </field>
@@ -57,9 +60,9 @@
         <field name="arch" type="xml">
             <form string="">
                 <sheet>
-                    <widget name="web_ribbon" title="Sospeso" bg_color="text-bg-warning" invisible="status == 'suspended'"/>
-                    <widget name="web_ribbon" title="Chiuso" bg_color="text-bg-danger" invisible="status == 'closed'"/>
-                    <widget name="web_ribbon" title="Completato" bg_color="text-bg-primary" invisible="status == 'completed'"/>
+                    <widget name="web_ribbon" title="Sospeso" bg_color="text-bg-warning" invisible="status != 'suspended'"/>
+                    <widget name="web_ribbon" title="Chiuso" bg_color="text-bg-danger" invisible="status != 'closed'"/>
+                    <widget name="web_ribbon" title="Completato" bg_color="text-bg-primary" invisible="status != 'completed'"/>
                     <field name="image" widget="image" class="oe_avatar" options="{'preview_image': 'avatar_128'}"/>
                     <div class="oe_title">
                         <label for="name"/>
@@ -73,7 +76,7 @@
                             <field name="street" placeholder="Indirizzo..." class="o_address_street"/>
                             <field name="street2" placeholder="Indirizzo 2..." class="o_address_street"/>
                             <field name="zip" placeholder="CAP" class="o_address_zip"/>
-                            <field name="city_id" placeholder="Comune e provincia" class="o_address_city"/>
+                            <field name="city_id" placeholder="Comune" class="o_address_city"/>
                             <!-- <field name="city" placeholder="Città" class="o_address_city"/>
                             <field name="state_id" class="o_address_state" placeholder="Provincia" options="{'no_open': True}" on_change="1" can_create="True" can_write="True"/>
                             <field name="country_id" placeholder="Nazione" class="o_address_country" invisible="1" readonly="1"/> -->

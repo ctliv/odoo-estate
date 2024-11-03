@@ -17,6 +17,7 @@
         'security/ir.model.access.csv',
         'views/worksite_site_views.xml',
         'views/worksite_invoice_views.xml',
+        'views/worksite_invoice_line_views.xml',
         'views/worksite_ddt_views.xml',
         'views/worksite_menus.xml'
     ]
