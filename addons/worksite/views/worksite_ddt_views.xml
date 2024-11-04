@@ -18,8 +18,8 @@
         </field>
     </record>
 
-    <!-- worksite.ddt tree view -->
-    <record id="worksite_ddt_view_tree" model="ir.ui.view">
+    <!-- worksite.ddt list view -->
+    <record id="worksite_ddt_view_list" model="ir.ui.view">
         <field name="name">worksite.ddt.view.list</field>
         <field name="model">worksite.ddt</field>
         <field name="arch" type="xml">
@@ -29,7 +29,11 @@
                 <field name="partner_id"/>
                 <field name="ddt_item_count"/>
                 <field name="line_count"/>
-                <field name="status"/>
+                <button name="action_check" type="object" 
+                        icon="fa-check" string=" " help="Valida" confirm="Confermi validazione?" invisible="status == 'checked'" />
+                <button name="action_uncheck" type="object" 
+                        icon="fa-times" string=" " help="Invalida" confirm="Confermi invalidazione?" invisible="status == 'unckeched'" />
+                <field name="status" invisible="1"/>
             </list>
         </field>
     </record>

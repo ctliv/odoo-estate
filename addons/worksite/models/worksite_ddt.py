@@ -18,7 +18,7 @@ class WorksiteDDT(models.Model):
     ddt_item_count = fields.Integer("Voci DDT", default=0)
     line_count = fields.Integer("Voci fattura", compute="_compute_line_count")
 
-    #TODO: Il campo è calcolato in base a invoice_id. Oppure sostituirlo con una classe css apposita in base a invoice_id
+    #Il campo non può essere calcolato in base a invoice_id o invoice_line_id, perché le voci del DDT potrebbero non corrispondere in numero
     status = fields.Selection(
             string='Stato',
             selection=DDT_STATUS,
@@ -27,7 +27,7 @@ class WorksiteDDT(models.Model):
             copy=False
             )
     
-    #worksite_ids implicito, recuperato dalle voci fattura
+    #worksite_ids impliciti, recuperati dalle voci fattura
     partner_id = fields.Many2one('res.partner')
     #invoice_ids implicito, recuperato dalle voci fattura, a loro volta linkate alla fattura
     invoice_line_ids = fields.One2many('account.move.line', inverse_name='ddt_id', string="Voci fattura")
@@ -61,3 +61,13 @@ class WorksiteDDT(models.Model):
     #         ):
     #             kwargs["token"] = token
     #     return super()._get_thread_with_access(thread_id, mode, **kwargs)
+
+    def action_check(self):
+        for rec in self:
+            rec.status = DDT_CHECKED
+        return True
+
+    def action_uncheck(self):
+        for rec in self:
+            rec.status = DDT_TOCHECK
+        return True

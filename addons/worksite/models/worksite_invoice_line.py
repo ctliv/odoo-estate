@@ -13,7 +13,7 @@ class WorksiteInvoiceLineInh(models.Model):
     _inherit = "account.move.line"
 
     costPc = fields.Integer("Percentuale costo")
-    spanAll = fields.Boolean("Dividere su tutti i cantieri attivi", default=False)
+    spanAll = fields.Boolean("Aspecifico", default=False)
 
     #Il campo è definito dalla presenza del  ddt_id. Oppure sostituirlo con una classe css apposita in base a ddt_id
     status = fields.Selection(
@@ -27,6 +27,11 @@ class WorksiteInvoiceLineInh(models.Model):
     
     worksite_id = fields.Many2one('worksite.site')
     ddt_id = fields.Many2one('worksite.ddt')
+
+    @api.depends('ddt_id')
+    def _compute_status(self):
+        for rec in self:
+            rec.status = INVOICELINE_CHECKED if rec.ddt_id else INVOICELINE_TOCHECK
 
     @api.constrains('costPc')
     def _check_selling_price(self):
