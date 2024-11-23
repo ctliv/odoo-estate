@@ -22,7 +22,9 @@ class PropertyOffer(models.Model):
 
     partner_id = fields.Many2one("res.partner", required=True)
     property_id = fields.Many2one("estate.property", required=True)
-    property_type_id = fields.Many2one("estate.property.type", related="property_id.type_id", store=True)
+    property_type_id = fields.Many2one(
+        "estate.property.type", related="property_id.type_id", store=True
+    )
 
     _sql_constraints = [("price", "CHECK (price > 0)", "Price must be above zero")]
 
@@ -99,7 +101,6 @@ class PropertyOffer(models.Model):
         # To instantiate an estate.property object, use self.env[model_name].browse(value)
         created = super(PropertyOffer, self).create(vals)
         for record in created:
-            if record.property_id.state == 'new':
-                record.property_id.state = 'offer_received'
+            if record.property_id.state == "new":
+                record.property_id.state = "offer_received"
         return created
-    
